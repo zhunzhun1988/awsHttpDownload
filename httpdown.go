@@ -74,9 +74,11 @@ func (awsh *awsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	var bucket *s3.Bucket
 	if bucketName == "" {
+		w.Write([]byte(fmt.Sprintf("<body>\n")))
 		for _, b := range resp.Buckets {
-			w.Write([]byte(fmt.Sprintf("%s\n", b.Name)))
+			w.Write([]byte(fmt.Sprintf("<br><tr>&emsp;&emsp;<a href=\"http://%s/%s\"> <font size=\"18\"> %s</font></a></tr>", r.Host, b.Name, b.Name)))
 		}
+		w.Write([]byte(fmt.Sprintf("</body>\n")))
 		return
 	} else {
 		for i, b := range resp.Buckets {
@@ -99,9 +101,12 @@ func (awsh *awsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				paths = append(paths, s)
 			}
 			sort.Strings(paths)
+			w.Write([]byte(fmt.Sprintf("<body>\n")))
 			for i, _ := range paths {
-				w.Write([]byte(fmt.Sprintf("%s\n", paths[len(paths)-i-1])))
+				w.Write([]byte(fmt.Sprintf("<br><tr>&emsp;&emsp;<a href=\"http://%s/%s/%s\"> <font size=\"18\"> %s</font></a></tr>",
+					r.Host, bucket.Name, paths[len(paths)-i-1], paths[len(paths)-i-1])))
 			}
+			w.Write([]byte(fmt.Sprintf("</body>\n")))
 			return
 		} else {
 			var findPath bool
