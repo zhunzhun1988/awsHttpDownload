@@ -138,9 +138,9 @@ func main() {
 	fs.StringVar(&port, "port", "", "httpserver listen port")
 	pflag.Parse()
 	awsh := &awsHandler{
-		AccessKey:  accessKey,  //"LYLMTYEH6YC5VIJ04USX",
-		SecretKey:  secretKey,  // "tPiENzJDy88xawCDgYvOY84HWHpHWfoa56XZRm3X",
-		S3Endpoint: s3Endpoint, //"http://10.19.248.200:30150",
+		AccessKey:  accessKey,  //"QYLMTYEH6YC5VIJ04FSX",
+		SecretKey:  secretKey,  // "tPiENzJDy88xawCDgYvOY84HWHpHWfoa56XZRm33",
+		S3Endpoint: s3Endpoint, //"http://10.19.1.1:30150",
 	}
 	if accessKey == "" {
 		log.Printf("accessKey should not be empty")
