@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"sort"
+	"strconv"
 	"strings"
 
 	"log"
@@ -47,6 +48,7 @@ func getBucketPathFromPath(p string) string {
 }
 func (awsh *awsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s request %s\n", r.RemoteAddr, r.URL.Path)
+
 	var auth aws.Auth
 	auth.AccessKey = awsh.AccessKey
 	auth.SecretKey = awsh.SecretKey
@@ -120,6 +122,12 @@ func (awsh *awsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, fmt.Sprintf("get connectRead err:%v", err), http.StatusNotFound)
 				return
 			}
+
+			w.Header().Set("Accept-Ranges", "bytes")
+			if w.Header().Get("Content-Encoding") == "" {
+				w.Header().Set("Content-Length", strconv.FormatInt(size, 10))
+			}
+			w.WriteHeader(http.StatusOK)
 			io.CopyN(w, connectRead, size)
 		}
 	} else {
